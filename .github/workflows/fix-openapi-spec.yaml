@@ -104,6 +104,17 @@ jobs:
           # Extract and save feedback to root directory
           echo "$response" | jq '.feedback' > feedback.json
           
+          # Fix the repaired_file field in feedback.json to use actual file path instead of temp name
+          if [ -f feedback.json ]; then
+            # Get the actual filename from the file path
+            actual_filename=$(basename "${{ steps.parse.outputs.file_path }}")
+            # Replace any temporary filename with the actual filename in feedback.json
+            jq --arg filename "$actual_filename" '
+              if .repaired_file then 
+                .repaired_file = $filename 
+              else . end' feedback.json > feedback_temp.json && mv feedback_temp.json feedback.json
+          fi
+          
           # Log what was saved
           echo "Fixed spec saved to: ${{ steps.parse.outputs.file_path }}"
           echo "Feedback saved to: feedback.json"
