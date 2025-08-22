@@ -30,7 +30,7 @@ Optional: Provide context on what needs to be fixed ie security issues, paramete
 
 Example: The schema for /users/{id} is missing required properties...
 -->
-
+fix_context: 
 
 ## Error Context
 <!-- 
@@ -38,3 +38,4 @@ Optional: Provide error context (specific error messages or validation failures)
 
 Example: Validation error: 'components.schemas.User' missing required field 'id'
 -->
+error_context:
