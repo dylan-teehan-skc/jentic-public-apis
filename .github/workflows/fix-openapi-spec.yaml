@@ -6,7 +6,7 @@ on:
 
 jobs:
   fix_spec:
-    if: contains(github.event.issue.body, '<!-- spec-fix-request-marker -->')
+    if: contains(github.event.issue.labels.*.name, 'spec-fix')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -190,7 +190,7 @@ jobs:
             --body-file pr_body.md \
             --head "$BRANCH_NAME" \
             --base main \
-            --label "automated-fix"
+            --label "automated-fix,spec-fix"
           
           echo "pr_created=true" >> $GITHUB_OUTPUT
         env:
