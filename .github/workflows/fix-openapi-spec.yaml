@@ -37,10 +37,10 @@ jobs:
             const errorContext = errorContextMatch ? errorContextMatch[1].trim() : '';
             
             // Extract file path from raw URL for later use
-            // Example: https://raw.githubusercontent.com/jentic/jentic-public-apis/main/apis/openapi/docker.com/engine/1.33/openapi.json
+            // Example: https://raw.githubusercontent.com/jentic/jentic-public-apis/refs/heads/main/apis/openapi/docker.com/engine/1.33/openapi.json
             // Should extract: apis/openapi/docker.com/engine/1.33/openapi.json
             const urlPath = rawUrl.replace('https://raw.githubusercontent.com/', '').split('/');
-            // urlPath[0] = org, urlPath[1] = repo, urlPath[2] = branch/ref, urlPath[3+] = file path
+            // urlPath[0] = org, urlPath[1] = repo, urlPath[2] = refs, urlPath[3] = heads, urlPath[4] = branch, urlPath[5+] = file path
             // Handle both 'main' and 'refs/heads/main' formats
             let startIndex = 3;
             if (urlPath[2] === 'refs' && urlPath[3] === 'heads') {
@@ -108,11 +108,8 @@ jobs:
           if [ -f feedback.json ]; then
             # Get the actual filename from the file path
             actual_filename=$(basename "${{ steps.parse.outputs.file_path }}")
-            # Replace any temporary filename with the actual filename in feedback.json
-            jq --arg filename "$actual_filename" '
-              if .repaired_file then 
-                .repaired_file = $filename 
-              else . end' feedback.json > feedback_temp.json && mv feedback_temp.json feedback.json
+            # Replace any temporary filename with the actual filename in feedback.json (handle array structure)
+            jq --arg filename "$actual_filename" 'map(.repaired_file = $filename)' feedback.json > feedback_temp.json && mv feedback_temp.json feedback.json
           fi
           
           # Log what was saved
