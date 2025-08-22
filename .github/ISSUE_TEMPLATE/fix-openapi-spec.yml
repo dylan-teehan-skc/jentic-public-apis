@@ -1,0 +1,59 @@
+name: Fix OpenAPI Specification
+description: Submit a request to fix an OpenAPI spec
+title: "[Spec Fix]: "
+labels: [spec-fix]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Fix OpenAPI Specification Request
+        
+        This form will trigger an automated workflow to fix OpenAPI specifications using our repair service.
+        
+        <!-- spec-fix-request-marker -->
+        
+  - type: input
+    id: spec_fix_url
+    attributes:
+      label: Raw URL
+      description: |
+        **REQUIRED**: Please provide the RAW JSON URL to the OpenAPI specification from the Jentic Public APIs Repo.
+        The API will download this URL, process the contents, apply fixes, replace the original spec file, and add feedback.json in a PR.
+
+        Examples:
+        - ✅ CORRECT: `https://example.com/api.json` or `https://raw.githubusercontent.com/.../api.json`  
+        - ❌ INCORRECT: `https://github.com/.../blob/.../api.json` or any .yaml files
+
+        The URL should point directly to the JSON file, not a web page.
+      placeholder: "https://raw.githubusercontent.com/org/repo/main/apis/openapi/vendor/api/version/openapi.json"
+    validations:
+      required: true
+
+  - type: input
+    id: doc_url
+    attributes:
+      label: Documentation URL
+      description: "Optional: Paste the documentation URL for this API"
+      placeholder: "https://docs.example.com/api"
+    validations:
+      required: false
+
+  - type: textarea
+    id: fix_context
+    attributes:
+      label: Fix Context
+      description: |
+        Optional: Provide context on what needs to be fixed (e.g., security issues, parameter issues, schema issues, etc.)
+      placeholder: "The schema for /users/{id} is missing required properties..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: error_context
+    attributes:
+      label: Error Context
+      description: |
+        Optional: Provide error context (specific error messages or validation failures)
+      placeholder: "Validation error: 'components.schemas.User' missing required field 'id'"
+    validations:
+      required: false
