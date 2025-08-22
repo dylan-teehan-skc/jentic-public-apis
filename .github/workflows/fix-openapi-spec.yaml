@@ -173,7 +173,7 @@ jobs:
             --body-file pr_body.md \
             --head "$BRANCH_NAME" \
             --base main \
-            --label "automated-fix,spec-fix"
+            --label "automated-fix"
           
           echo "pr_created=true" >> $GITHUB_OUTPUT
         env:
