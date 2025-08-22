@@ -28,8 +28,8 @@ jobs:
             const body = context.payload.issue.body;
             const rawUrlMatch = body.match(/spec_fix_url:\s*([^\n]+)/);
             const docUrlMatch = body.match(/doc_url:\s*([^\n]+)/);
-            const fixContextMatch = body.match(/## Fix Context\s*[\s\S]*?\n\s*([\s\S]*?)(?=\n## |$)/);
-            const errorContextMatch = body.match(/## Error Context\s*[\s\S]*?\n\s*([\s\S]*?)(?=\n## |$)/);
+            const fixContextMatch = body.match(/fix_context:\s*([\s\S]*?)(?=\n## |$)/);
+            const errorContextMatch = body.match(/error_context:\s*([\s\S]*?)(?=\n## |$)/);
             
             const rawUrl = rawUrlMatch ? rawUrlMatch[1].trim() : '';
             const docUrl = docUrlMatch ? docUrlMatch[1].trim() : '';
@@ -40,8 +40,13 @@ jobs:
             // Example: https://raw.githubusercontent.com/jentic/jentic-public-apis/main/apis/openapi/docker.com/engine/1.33/openapi.json
             // Should extract: apis/openapi/docker.com/engine/1.33/openapi.json
             const urlPath = rawUrl.replace('https://raw.githubusercontent.com/', '').split('/');
-            // urlPath[0] = org, urlPath[1] = repo, urlPath[2] = branch, urlPath[3+] = file path
-            const filePath = urlPath.slice(3).join('/'); // Remove org/repo/branch parts
+            // urlPath[0] = org, urlPath[1] = repo, urlPath[2] = branch/ref, urlPath[3+] = file path
+            // Handle both 'main' and 'refs/heads/main' formats
+            let startIndex = 3;
+            if (urlPath[2] === 'refs' && urlPath[3] === 'heads') {
+              startIndex = 5; // Skip org/repo/refs/heads/branch
+            }
+            const filePath = urlPath.slice(startIndex).join('/'); // Remove org/repo/branch parts
             
             core.setOutput('raw_url', rawUrl);
             core.setOutput('doc_url', docUrl);
