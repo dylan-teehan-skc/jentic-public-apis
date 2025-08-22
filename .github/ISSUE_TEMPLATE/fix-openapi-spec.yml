@@ -5,7 +5,9 @@ labels: [spec-fix]
 body:
   - type: markdown
     attributes:
-      value: "<!-- spec-fix-request -->"
+      value: |
+        <!-- spec-fix-request -->
+        This issue is for fixing OpenAPI specifications using the automated repair service.
   - type: input
     id: raw_url
     attributes:
