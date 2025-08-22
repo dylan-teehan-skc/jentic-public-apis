@@ -6,7 +6,7 @@ on:
 
 jobs:
   fix_spec:
-    if: contains(github.event.issue.body, '<!-- spec-fix-request -->')
+    if: contains(github.event.issue.body, 'spec_fix_url:')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -26,10 +26,10 @@ jobs:
         with:
           script: |
             const body = context.payload.issue.body;
-            const rawUrlMatch = body.match(/### Raw URL\s*\n\s*([^\n]+)/);
-            const docUrlMatch = body.match(/### Doc URL\s*\n\s*([^\n]+)/);
-            const fixContextMatch = body.match(/### Fix Context\s*\n\s*([\s\S]*?)(?=\n### |$)/);
-            const errorContextMatch = body.match(/### Error Context\s*\n\s*([\s\S]*?)(?=\n### |$)/);
+            const rawUrlMatch = body.match(/spec_fix_url:\s*([^\n]+)/);
+            const docUrlMatch = body.match(/doc_url:\s*([^\n]+)/);
+            const fixContextMatch = body.match(/## Fix Context\s*[\s\S]*?\n\s*([\s\S]*?)(?=\n## |$)/);
+            const errorContextMatch = body.match(/## Error Context\s*[\s\S]*?\n\s*([\s\S]*?)(?=\n## |$)/);
             
             const rawUrl = rawUrlMatch ? rawUrlMatch[1].trim() : '';
             const docUrl = docUrlMatch ? docUrlMatch[1].trim() : '';
