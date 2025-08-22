@@ -1,6 +1,6 @@
 name: Fix OpenAPI Specification
 description: Submit a request to fix an OpenAPI spec
-title: "[Spec Fix]: "
+title: ""
 labels: [spec-fix]
 body:
   - type: markdown
