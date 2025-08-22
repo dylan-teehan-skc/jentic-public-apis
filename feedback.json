@@ -1,0 +1,19 @@
+[
+  {
+    "repaired_file": "apis/openapi/flickr.com/main/1.0.0/openapi.json",
+    "repairs": [
+      {
+        "issue": {
+          "message": "The API specification is missing security definitions, but the 'api_key' query parameter is consistently used across 22 operations for authentication. OAuth-like endpoints also exist but are not covered by this API key.",
+          "level": "error",
+          "location": {
+            "jsonPath": "#/components/securitySchemes"
+          }
+        },
+        "action_taken": "Defined a global API key security scheme named 'ApiKeyAuth'. This scheme requires an API key to be passed in the 'api_key' query parameter, and it is applied globally to all operations except for the identified OAuth endpoints (/oauth/access_token, /oauth/request_token), which will retain their inline parameters.",
+        "source": "automated-tool",
+        "timestamp": "2025-08-22T13:51:51.876633"
+      }
+    ]
+  }
+]
