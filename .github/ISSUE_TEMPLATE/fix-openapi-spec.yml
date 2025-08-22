@@ -1,0 +1,46 @@
+name: "Fix OpenAPI Specification"
+description: "Submit a request to fix an OpenAPI spec"
+title: "[Spec Fix]: "
+labels: [spec-fix]
+body:
+  - type: input
+    id: raw_url
+    attributes:
+      label: "Raw URL"
+      description: |
+        REQUIRED: Please provide the RAW JSON URL to the OpenAPI specification from the Jentic Public APIs Repo.
+        The API will download this URL, process the contents, apply fixes, replace the original spec file, and add feedback.json in a PR.
+
+        Examples:
+        - CORRECT: https://example.com/api.json or https://raw.githubusercontent.com/.../api.json
+        - INCORRECT: https://github.com/.../blob/.../api.json or any .y files
+      placeholder: "https://raw.githubusercontent.com/org/repo/main/api.json"
+    validations:
+      required: true
+
+  - type: input
+    id: doc_url
+    attributes:
+      label: "Doc URL"
+      description: "Paste the documentation URL"
+      placeholder: "https://example.com/docs"
+    validations:
+      required: false
+
+  - type: textarea
+    id: fix_context
+    attributes:
+      label: "Fix Context"
+      description: "Provide context on what needs to be fixed ie security issues, parameter issues, schema issues, etc."
+      placeholder: "The schema for /users/{id} is missing required properties..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: error_context
+    attributes:
+      label: "Error Context"
+      description: "Optional: Provide error context (specific error messages or validation failures)"
+      placeholder: "Validation error: 'components.schemas.User' missing required field 'id'"
+    validations:
+      required: false
