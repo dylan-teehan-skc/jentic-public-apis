@@ -26,16 +26,21 @@ jobs:
         with:
           script: |
             const body = context.payload.issue.body;
+            console.log('Issue body:', body);
+            
             // Parse YAML form fields from GitHub issue body
-            const rawUrlMatch = body.match(/### Raw URL\s*\n\s*([^\n]+)/);
-            const docUrlMatch = body.match(/### Documentation URL\s*\n\s*([^\n]+)/);
-            const fixContextMatch = body.match(/### Fix Context\s*\n\s*([\s\S]*?)(?=\n### |$)/);
-            const errorContextMatch = body.match(/### Error Context\s*\n\s*([\s\S]*?)(?=\n### |$)/);
+            // GitHub forms create sections like "### Field Label\n\nValue"
+            const rawUrlMatch = body.match(/### Raw URL\s*\n\n([^\n]+)/);
+            const docUrlMatch = body.match(/### Documentation URL\s*\n\n([^\n]+)/);
+            const fixContextMatch = body.match(/### Fix Context\s*\n\n([\s\S]*?)(?=\n### |$)/);
+            const errorContextMatch = body.match(/### Error Context\s*\n\n([\s\S]*?)(?=\n### |$)/);
             
             const rawUrl = rawUrlMatch ? rawUrlMatch[1].trim() : '';
-            const docUrl = docUrlMatch ? docUrlMatch[1].trim() : '';
-            const fixContext = fixContextMatch ? fixContextMatch[1].trim() : '';
-            const errorContext = errorContextMatch ? errorContextMatch[1].trim() : '';
+            const docUrl = docUrlMatch && docUrlMatch[1] !== '_No response_' ? docUrlMatch[1].trim() : '';
+            const fixContext = fixContextMatch && fixContextMatch[1] !== '_No response_' ? fixContextMatch[1].trim() : '';
+            const errorContext = errorContextMatch && errorContextMatch[1] !== '_No response_' ? errorContextMatch[1].trim() : '';
+            
+            console.log('Parsed values:', { rawUrl, docUrl, fixContext, errorContext });
             
             // Extract file path from raw URL for later use
             // Example: https://raw.githubusercontent.com/jentic/jentic-public-apis/refs/heads/main/apis/openapi/docker.com/engine/1.33/openapi.json
