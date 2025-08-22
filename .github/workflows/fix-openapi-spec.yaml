@@ -106,10 +106,10 @@ jobs:
           
           # Fix the repaired_file field in feedback.json to use actual file path instead of temp name
           if [ -f feedback.json ]; then
-            # Get the actual filename from the file path
-            actual_filename=$(basename "${{ steps.parse.outputs.file_path }}")
-            # Replace any temporary filename with the actual filename in feedback.json (handle array structure)
-            jq --arg filename "$actual_filename" 'map(.repaired_file = $filename)' feedback.json > feedback_temp.json && mv feedback_temp.json feedback.json
+            # Use the full file path instead of just the filename
+            actual_file_path="${{ steps.parse.outputs.file_path }}"
+            # Replace any temporary filename with the actual file path in feedback.json (handle array structure)
+            jq --arg filepath "$actual_file_path" 'map(.repaired_file = $filepath)' feedback.json > feedback_temp.json && mv feedback_temp.json feedback.json
           fi
           
           # Log what was saved
