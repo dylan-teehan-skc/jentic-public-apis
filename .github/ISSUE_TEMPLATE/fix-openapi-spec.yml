@@ -33,7 +33,7 @@ body:
     id: doc_url
     attributes:
       label: Documentation URL
-      description: "Optional: Paste the documentation URL for this API"
+      description: "Paste the documentation URL for this API"
       placeholder: "https://docs.example.com/api"
     validations:
       required: false
@@ -43,7 +43,7 @@ body:
     attributes:
       label: Fix Context
       description: |
-        Optional: Provide context on what needs to be fixed (e.g., security issues, parameter issues, schema issues, etc.)
+        Provide context on what needs to be fixed (e.g., security issues, parameter issues, schema issues, etc.)
       placeholder: "The schema for /users/{id} is missing required properties..."
     validations:
       required: false
