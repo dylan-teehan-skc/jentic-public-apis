@@ -1,0 +1,19 @@
+[
+  {
+    "repaired_file": "tmpst4l_rln.json",
+    "repairs": [
+      {
+        "issue": {
+          "message": "A new server definition is required to support a custom Docker API instance domain.",
+          "level": "improvement",
+          "location": {
+            "jsonPath": "#/servers"
+          }
+        },
+        "action_taken": "Added a new server definition to the OpenAPI specification. The new server uses the URL 'https://{my-docker-domain}/v1.33' and includes a 'my-docker-domain' variable with a description and a default value of 'docker.example.com'.",
+        "source": "automated-tool",
+        "timestamp": "2025-08-22T11:16:02.857181"
+      }
+    ]
+  }
+]
