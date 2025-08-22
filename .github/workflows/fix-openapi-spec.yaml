@@ -108,6 +108,9 @@ jobs:
           echo "Fixed spec saved to: ${{ steps.parse.outputs.file_path }}"
           echo "Feedback saved to: feedback.json"
           
+          # Clean up temporary files before committing
+          rm -f request.json api_response.json
+          
           echo "api_success=true" >> $GITHUB_OUTPUT
       
       - name: Create PR with changes
