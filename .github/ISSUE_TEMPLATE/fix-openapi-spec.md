@@ -18,7 +18,7 @@ Examples:
 
 The URL should point directly to the JSON file, not a web page.
 -->
-spec_fix_url: 
+spec-fix-url: 
 
 ## Doc URL
 <!-- Optional: Paste the documentation URL -->
