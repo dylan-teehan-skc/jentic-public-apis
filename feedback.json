@@ -1,0 +1,19 @@
+[
+  {
+    "repaired_file": "tmp1hdtyetu.json",
+    "repairs": [
+      {
+        "issue": {
+          "message": "The OpenAPI specification is missing a server definition for a custom Docker domain, which is required for flexible deployment.",
+          "level": "improvement",
+          "location": {
+            "jsonPath": "#/servers"
+          }
+        },
+        "action_taken": "Added a new server definition to the OpenAPI specification. The new server URL is 'https://{my-docker-domain}/v1.33', and it includes a 'my-docker-domain' variable with a default value of 'docker.example.com' and a description 'The custom domain for your Docker API instance.'.",
+        "source": "automated-tool",
+        "timestamp": "2025-08-22T11:19:28.215669"
+      }
+    ]
+  }
+]

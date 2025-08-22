@@ -1,0 +1,6 @@
+{
+  "url": "https://raw.githubusercontent.com/dylan-teehan-skc/jentic-public-apis/refs/heads/main/apis/openapi/docker.com/engine/1.33/openapi.json",
+  "doc_url": "https://docs.docker.com/reference/api/engine/",
+  "fix_context": "fix_context: Add a new server to the OpenAPI specification. The URL for this server should be https://{my-docker-domain}/v1.33. This server should have a variable named my-docker-domain with the description 'The custom domain for your Docker API instance.' The default value for my-docker-domain should be [docker.example.com](http://docker.example.com/).",
+  "error_context": ""
+}
