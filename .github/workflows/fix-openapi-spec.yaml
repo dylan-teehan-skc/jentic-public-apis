@@ -6,7 +6,7 @@ on:
 
 jobs:
   fix_spec:
-    if: contains(github.event.issue.labels.*.name, 'spec-fix')
+    if: contains(github.event.issue.body, 'spec-fix-request')
     runs-on: ubuntu-latest
     permissions:
       contents: write

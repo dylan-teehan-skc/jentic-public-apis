@@ -3,6 +3,9 @@ description: "Submit a request to fix an OpenAPI spec"
 title: "[Spec Fix]: "
 labels: [spec-fix]
 body:
+  - type: markdown
+    attributes:
+      value: "<!-- spec-fix-request -->"
   - type: input
     id: raw_url
     attributes:
