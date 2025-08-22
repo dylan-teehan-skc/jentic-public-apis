@@ -1,0 +1,19 @@
+[
+  {
+    "repaired_file": "apis/openapi/docker.com/engine/1.33/openapi.json",
+    "repairs": [
+      {
+        "issue": {
+          "message": "A new server definition is required to support a custom Docker domain, which is currently missing from the OpenAPI specification.",
+          "level": "improvement",
+          "location": {
+            "jsonPath": "#/servers"
+          }
+        },
+        "action_taken": "Added a new server definition with the URL 'https://{my-docker-domain}/v1.33'. This new server includes a variable 'my-docker-domain' with a description 'The custom domain for your Docker API instance.' and a default value of 'docker.example.com'.",
+        "source": "automated-tool",
+        "timestamp": "2025-08-22T13:31:10.055690"
+      }
+    ]
+  }
+]
