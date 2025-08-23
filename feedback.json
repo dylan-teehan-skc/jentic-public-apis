@@ -1,0 +1,55 @@
+[
+  {
+    "repaired_file": "apis/openapi/docker.com/engine/1.33/openapi.json",
+    "repairs": [
+      {
+        "issue": {
+          "message": "The Docker Engine API documentation and scattered parameters indicate that registry-related operations require an 'X-Registry-Auth' header for authentication, but this is not defined in the OpenAPI specification's security schemes.",
+          "level": "error",
+          "location": {
+            "jsonPath": "#/components/securitySchemes"
+          }
+        },
+        "action_taken": "Defined a security scheme named 'RegistryAuth' of type 'apiKey' that expects the authentication token in the 'X-Registry-Auth' header. This scheme has been applied to specific POST operations that interact with registries, as indicated by the documentation and existing 'X-Registry-Auth' parameters. The request to change server URLs and add a 'test param' could not be fulfilled due to the constraints of the output format, which focuses solely on security definitions.",
+        "source": "automated-tool",
+        "timestamp": "2025-08-23T10:42:48.210323"
+      },
+      {
+        "issue": {
+          "message": "The OpenAPI spec is missing a proper server URL definition with variables, has an incorrect schema type for the `buildargs` parameter in the `/build` POST operation, lacks a defined security scheme for `X-Registry-Auth` headers, and requires an additional `test param`.",
+          "level": "improvement",
+          "location": {
+            "jsonPath": "#/servers"
+          }
+        },
+        "action_taken": "Added a `servers` array to the root of the spec, defining the Docker Engine API endpoint with `your-docker-instance-domain` and `api-version-number` variables. Corrected the schema type for the `buildargs` query parameter in the `/build` POST operation from `integer` to `string` with `format: json`. Defined a `registryAuth` security scheme for `X-Registry-Auth` headers in `components/securitySchemes` and applied it to relevant operations (`/images/create`, `/images/{name}/push`, `/services/create`, `/services/{id}/update`, `/plugins/pull`, `/plugins/{name}/upgrade`), replacing the explicit header parameters. Added a new query parameter named `test param` to the `/info` GET operation.",
+        "source": "automated-tool",
+        "timestamp": "2025-08-23T10:42:48.210323"
+      },
+      {
+        "issue": {
+          "message": "The OpenAPI spec requires updates to the server URL, addition of a global security scheme, inclusion of a new parameter, and resolution of several schema definition issues, including missing types and unused components.",
+          "level": "error",
+          "location": {
+            "jsonPath": "/servers"
+          }
+        },
+        "action_taken": "Updated the server URL to 'https://{your-docker-instance-domain}/api/v{api-version-number}' with dynamic variables for the Docker instance domain and API version number, referencing the API version matrix from the Docker documentation. Added a global API Key security scheme (`X-API-Key` in header) to address the security requirement. Introduced a new query parameter named 'test_param' under `/components/parameters`. Fixed the 'HostConfig' schema by adding the missing 'type: object' field, as it uses 'allOf' and defines properties. Removed the unused schema components 'BuildInfo', 'CreateImageInfo', and 'PushImageInfo' as indicated by the `spec_usage` context. The 'Swarm' schema issue could not be addressed as its definition was not provided in the `schemas` context.",
+        "source": "automated-tool",
+        "timestamp": "2025-08-23T10:42:48.210323"
+      },
+      {
+        "issue": {
+          "message": "The server URL needs to be updated from a relative path '/v1.33' to a full, configurable URL 'https://{your-docker-instance-domain}/api/v{api-version-number}' with defined variables.",
+          "level": "improvement",
+          "location": {
+            "jsonPath": "#/servers/0"
+          }
+        },
+        "action_taken": "Updated the server URL from '/v1.33' to 'https://{your-docker-instance-domain}/api/v{api-version-number}' and added corresponding server variables for 'your-docker-instance-domain' (defaulting to 'localhost:2375') and 'api-version-number' (defaulting to '1.33') to allow for dynamic configuration of the Docker API endpoint.",
+        "source": "automated-tool",
+        "timestamp": "2025-08-23T10:42:48.210323"
+      }
+    ]
+  }
+]
