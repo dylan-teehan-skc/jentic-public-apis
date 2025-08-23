@@ -11,7 +11,35 @@
   },
   "servers": [
     {
-      "url": "/v1.33"
+      "url": "https://{your-docker-instance-domain}/api/v{api-version-number}",
+      "variables": {
+        "your-docker-instance-domain": {
+          "default": "localhost:2375",
+          "description": "The domain or IP address of your Docker instance."
+        },
+        "api-version-number": {
+          "default": "1.33",
+          "enum": [
+            "1.33",
+            "1.32",
+            "1.31",
+            "1.30",
+            "1.29",
+            "1.28",
+            "1.27",
+            "1.26",
+            "1.25",
+            "1.24",
+            "1.23",
+            "1.22",
+            "1.21",
+            "1.20",
+            "1.19",
+            "1.18"
+          ],
+          "description": "The API version number for the Docker Engine API."
+        }
+      }
     }
   ],
   "paths": {

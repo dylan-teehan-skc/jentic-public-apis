@@ -1,0 +1,19 @@
+[
+  {
+    "repaired_file": "apis/openapi/docker.com/engine/1.33/openapi.json",
+    "repairs": [
+      {
+        "issue": {
+          "message": "The current server URL '/v1.33' is a relative path and does not provide flexibility for different Docker instance domains or API versions.",
+          "level": "improvement",
+          "location": {
+            "jsonPath": "#/servers/0"
+          }
+        },
+        "action_taken": "Updated the first server entry to use a templated URL 'https://{your-docker-instance-domain}/api/v{api-version-number}' with defined variables. The 'your-docker-instance-domain' variable defaults to 'localhost:2375', and the 'api-version-number' variable defaults to '1.33' with an enum of supported versions derived from the API documentation.",
+        "source": "automated-tool",
+        "timestamp": "2025-08-23T10:39:05.209353"
+      }
+    ]
+  }
+]
