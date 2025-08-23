@@ -104,11 +104,11 @@ jobs:
             exit 1
           fi
           
-          # Extract and save the fixed spec to the original file path
-          echo "$response" | jq '.fixed_spec' > "${{ steps.parse.outputs.file_path }}"
+          # Use jq compact output to minimize formatting changes, then pretty print
+          echo "$response" | jq -c '.fixed_spec' | jq > "${{ steps.parse.outputs.file_path }}"
           
-          # Extract and save feedback to root directory
-          echo "$response" | jq '.feedback' > feedback.json
+          # Extract feedback with same approach
+          echo "$response" | jq -c '.feedback' | jq > feedback.json
           
           # Fix the repaired_file field in feedback.json to use actual file path instead of temp name
           if [ -f feedback.json ]; then
