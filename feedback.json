@@ -1,0 +1,31 @@
+[
+  {
+    "repaired_file": "apis/openapi/docker.com/engine/1.33/openapi.json",
+    "repairs": [
+      {
+        "issue": {
+          "message": "The Docker Engine API documentation specifies that registry authentication is handled via the 'X-Registry-Auth' header for specific operations, but this is not defined as a security scheme in the OpenAPI specification. Instead, 'X-Registry-Auth' is scattered as an inline header parameter across several registry-related endpoints.",
+          "level": "error",
+          "location": {
+            "jsonPath": "#/components/securitySchemes"
+          }
+        },
+        "action_taken": "Defined a new security scheme named 'RegistryAuth' of type 'apiKey', located 'in' the 'header' with the 'name' 'X-Registry-Auth'. This scheme is applied to all identified registry-related POST operations where 'X-Registry-Auth' was previously an inline parameter: '/images/create', '/images/{name}/push', '/plugins/pull', '/plugins/{name}/upgrade', '/services/create', and '/services/{id}/update'. This centralizes the definition and enforcement of registry authentication. The '/auth' endpoint, which provides identity tokens, is correctly excluded from requiring this scheme. Other specific parameters like 'registryAuthFrom' and 'rotate*Token' are not treated as general authentication and remain as inline parameters.",
+        "source": "automated-tool",
+        "timestamp": "2025-08-23T09:06:56.312374"
+      },
+      {
+        "issue": {
+          "message": "Several schema components (BuildInfo, CreateImageInfo, PushImageInfo) are unused, and the HostConfig schema is missing a top-level 'type' field. The 'Swarm' schema was reported as missing properties but was not provided in the context.",
+          "level": "warning",
+          "location": {
+            "jsonPath": "/BuildInfo"
+          }
+        },
+        "action_taken": "Removed the unused 'BuildInfo', 'CreateImageInfo', and 'PushImageInfo' schema components to streamline the OpenAPI specification, as they were not referenced in the API usage context. Added the missing 'type: object' field to the 'HostConfig' schema to ensure it is a valid object definition, consistent with its 'allOf' structure. The issue regarding the 'Swarm' schema could not be addressed as the schema definition was not present in the provided context.",
+        "source": "automated-tool",
+        "timestamp": "2025-08-23T09:06:56.312374"
+      }
+    ]
+  }
+]
