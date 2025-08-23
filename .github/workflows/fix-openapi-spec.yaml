@@ -104,11 +104,8 @@ jobs:
             exit 1
           fi
           
-          # Use jq compact output to minimize formatting changes, then pretty print
-          echo "$response" | jq -c '.fixed_spec' | jq > "${{ steps.parse.outputs.file_path }}"
-          
-          # Extract feedback with same approach
-          echo "$response" | jq -c '.feedback' | jq > feedback.json
+          # Use Python with ensure_ascii=True to preserve Unicode escaping
+          echo "$response" | python3 -c 'import json; import sys; response = json.load(sys.stdin); json.dump(response.get("fixed_spec"), open("${{ steps.parse.outputs.file_path }}", "w"), indent=2, ensure_ascii=True) if response.get("fixed_spec") else None; json.dump(response.get("feedback"), open("feedback.json", "w"), indent=2, ensure_ascii=True) if response.get("feedback") else None'
           
           # Fix the repaired_file field in feedback.json to use actual file path instead of temp name
           if [ -f feedback.json ]; then
