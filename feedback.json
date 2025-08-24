@@ -1,0 +1,19 @@
+[
+  {
+    "repaired_file": "apis/openapi/n8n.io/main/1.1.1/openapi.json",
+    "repairs": [
+      {
+        "issue": {
+          "message": "The API specification already correctly defines and applies the primary authentication method.",
+          "level": "improvement",
+          "location": {
+            "jsonPath": "#/components/securitySchemes"
+          }
+        },
+        "action_taken": "The API documentation clearly states that authentication is handled via an API key in the 'X-N8N-API-KEY' header. The current OpenAPI specification already includes a `security_scheme` named 'ApiKeyAuth' that correctly defines this method (type: apiKey, in: header, name: X-N8N-API-KEY) and applies it globally. No further changes are required to normalize security.",
+        "source": "automated-tool",
+        "timestamp": "2025-08-24T09:47:52.654115"
+      }
+    ]
+  }
+]
