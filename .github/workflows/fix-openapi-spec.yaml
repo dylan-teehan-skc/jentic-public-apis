@@ -223,7 +223,13 @@ jobs:
                   const repairs = JSON.parse(repairDetails);
                   repairSection = '\n**Analysis Results:**\n';
                   repairs.forEach(repair => {
-                    repairSection += `- **${repair.type}**: ${repair.action}\n`;
+                    if (repair.issue_description) {
+                      repairSection += `- **${repair.type} Issue**: ${repair.issue_description}\n`;
+                    }
+                    if (repair.action_description || repair.action) {
+                      const actionDesc = repair.action_description || repair.action;
+                      repairSection += `- **${repair.type} Action**: ${actionDesc}\n`;
+                    }
                   });
                   repairSection += '\n';
                 } catch (e) {
@@ -232,6 +238,26 @@ jobs:
               }
             } else {
               resultMessage = 'There was an error processing the specification. Please check the workflow logs for details.';
+              
+              // Even if API failed, show repair details if available
+              if (repairDetails) {
+                try {
+                  const repairs = JSON.parse(repairDetails);
+                  repairSection = '\n**Analysis Results (Despite Failure):**\n';
+                  repairs.forEach(repair => {
+                    if (repair.issue_description) {
+                      repairSection += `- **${repair.type} Issue**: ${repair.issue_description}\n`;
+                    }
+                    if (repair.action_description || repair.action) {
+                      const actionDesc = repair.action_description || repair.action;
+                      repairSection += `- **${repair.type} Action**: ${actionDesc}\n`;
+                    }
+                  });
+                  repairSection += '\n';
+                } catch (e) {
+                  console.log('Failed to parse repair details:', e);
+                }
+              }
             }
 
             const comment = `${emoji} ${title}!
