@@ -1,0 +1,19 @@
+[
+  {
+    "repaired_file": "apis/openapi/docker.com/engine/1.33/openapi.json",
+    "repairs": [
+      {
+        "issue": {
+          "message": "The Docker Engine API specification is missing security definitions for registry authentication. The documentation and scattered parameters indicate that an 'X-Registry-Auth' header is required for specific operations interacting with registries, but this is not formally defined or applied.",
+          "level": "error",
+          "location": {
+            "jsonPath": "#/components/securitySchemes"
+          }
+        },
+        "action_taken": "Defined a new security scheme named 'RegistryAuth' of type 'apiKey' located in the header with the name 'X-Registry-Auth'. This scheme is applied to all identified operations that require registry authentication, such as image creation, pushing, and plugin management. Global security was not applied as authentication is specific to registry-related endpoints, and the '/auth' endpoint is for credential exchange. Other scattered parameters like 'author' or 'rotateWorkerToken' were determined not to be general authentication credentials and were left as inline parameters.",
+        "source": "automated-tool",
+        "timestamp": "2025-08-25T15:12:49.113143"
+      }
+    ]
+  }
+]
