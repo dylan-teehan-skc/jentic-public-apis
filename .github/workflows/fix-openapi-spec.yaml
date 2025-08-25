@@ -43,16 +43,12 @@ jobs:
             console.log('Parsed values:', { rawUrl, docUrl, fixContext, errorContext });
 
             // Extract file path from raw URL for later use
-            // Example: https://raw.githubusercontent.com/jentic/jentic-public-apis/refs/heads/main/apis/openapi/docker.com/engine/1.33/openapi.json
-            // Should extract: apis/openapi/docker.com/engine/1.33/openapi.json
             const urlPath = rawUrl.replace('https://raw.githubusercontent.com/', '').split('/');
-            // urlPath[0] = org, urlPath[1] = repo, urlPath[2] = refs, urlPath[3] = heads, urlPath[4] = branch, urlPath[5+] = file path
-            // Handle both 'main' and 'refs/heads/main' formats
             let startIndex = 3;
             if (urlPath[2] === 'refs' && urlPath[3] === 'heads') {
-              startIndex = 5; // Skip org/repo/refs/heads/branch
+              startIndex = 5;
             }
-            const filePath = urlPath.slice(startIndex).join('/'); // Remove org/repo/branch parts
+            const filePath = urlPath.slice(startIndex).join('/');
 
             core.setOutput('raw_url', rawUrl);
             core.setOutput('doc_url', docUrl);
@@ -96,18 +92,21 @@ jobs:
           # Save full response for debugging
           echo "$response" > api_response.json
 
+          # Extract repair details FIRST (before checking success)
+          repair_details=$(echo "$response" | jq -c '.repair_details // null')
+          if [ "$repair_details" != "null" ] && [ ! -z "$repair_details" ]; then
+            echo "repair_details=$repair_details" >> $GITHUB_OUTPUT
+          fi
+
           # Check if API call was successful
           success=$(echo "$response" | jq -r '.success // false')
           if [ "$success" != "true" ]; then
             echo "API call failed:"
             echo "$response" | jq -r '.message // "Unknown error"'
-            exit 1
-          fi
-
-          # Extract repair details if present (for when no fixes applied)
-          repair_details=$(echo "$response" | jq -r '.repair_details // empty')
-          if [ ! -z "$repair_details" ]; then
-            echo "repair_details=$repair_details" >> $GITHUB_OUTPUT
+            # Don't exit 1 - let workflow continue to show repair details in comments
+            echo "api_success=false" >> $GITHUB_OUTPUT
+            rm -f request.json api_response.json
+            exit 0
           fi
 
           # Use Python with ensure_ascii=True to preserve Unicode escaping
@@ -115,37 +114,26 @@ jobs:
 
           # Fix the repaired_file field in feedback.json to use actual file path instead of temp name
           if [ -f feedback.json ]; then
-            # Use the full file path instead of just the filename
             actual_file_path="${{ steps.parse.outputs.file_path }}"
-            # Replace any temporary filename with the actual file path in feedback.json (handle array structure)
             jq --arg filepath "$actual_file_path" 'map(.repaired_file = $filepath)' feedback.json > feedback_temp.json && mv feedback_temp.json feedback.json
           fi
 
-          # Log what was saved
           echo "Fixed spec saved to: ${{ steps.parse.outputs.file_path }}"
           echo "Feedback saved to: feedback.json"
-
-          # Clean up temporary files before committing
           rm -f request.json api_response.json
-
           echo "api_success=true" >> $GITHUB_OUTPUT
 
       - name: Create PR with changes
         id: create_pr
         if: steps.api_call.outputs.api_success == 'true'
         run: |
-          # Configure git
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
 
-          # Create a new branch for the fix
           BRANCH_NAME="fix-spec-issue-${{ github.event.issue.number }}"
           git checkout -b "$BRANCH_NAME"
-
-          # Stage all changes
           git add .
 
-          # Commit changes (only if there are staged changes)
           if git diff --cached --quiet; then
             echo "No changes to commit"
             echo "pr_created=false" >> $GITHUB_OUTPUT
@@ -161,10 +149,8 @@ jobs:
             -m "" \
             -m "Resolves #${{ github.event.issue.number }}"
 
-          # Push the new branch
           git push origin "$BRANCH_NAME"
 
-          # Create PR body
           cat > pr_body.md << 'EOF'
           ## 🔧 OpenAPI Specification Fix
 
@@ -187,7 +173,6 @@ jobs:
           Closes #${{ github.event.issue.number }}
           EOF
 
-          # Create PR using GitHub CLI
           gh pr create \
             --title "Fix OpenAPI spec from issue #${{ github.event.issue.number }}" \
             --body-file pr_body.md \
@@ -233,7 +218,6 @@ jobs:
             } else if (apiSuccess && !prCreated) {
               resultMessage = 'The specification was processed but no changes were needed.';
 
-              // Add repair details only when no changes were made
               if (repairDetails) {
                 try {
                   const repairs = JSON.parse(repairDetails);
