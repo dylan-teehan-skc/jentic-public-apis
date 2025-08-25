@@ -121,20 +121,20 @@ jobs:
             spec_dir=$(dirname "${{ steps.parse.outputs.file_path }}")
             feedback_file="$spec_dir/feedback.json"
             
+            # Fix the repaired_file field in new feedback before merging
+            actual_file_path="${{ steps.parse.outputs.file_path }}"
+            jq --arg filepath "$actual_file_path" 'map(.repaired_file = $filepath)' new_feedback.json > new_feedback_fixed.json
+            
             # Check if feedback.json already exists in that directory
             if [ -f "$feedback_file" ]; then
               echo "Existing feedback.json found at $feedback_file - merging..."
               # Merge: combine existing and new feedback arrays
-              jq -s 'add' "$feedback_file" new_feedback.json > merged_feedback.json
+              jq -s 'add' "$feedback_file" new_feedback_fixed.json > merged_feedback.json
               mv merged_feedback.json "$feedback_file"
             else
               echo "No existing feedback.json found - creating new one at $feedback_file..."
-              mv new_feedback.json "$feedback_file"
+              mv new_feedback_fixed.json "$feedback_file"
             fi
-            
-            # Fix the repaired_file field in feedback.json to use actual file path instead of temp name
-            actual_file_path="${{ steps.parse.outputs.file_path }}"
-            jq --arg filepath "$actual_file_path" 'map(.repaired_file = $filepath)' "$feedback_file" > feedback_temp.json && mv feedback_temp.json "$feedback_file"
             
             rm -f new_feedback.json
           fi
