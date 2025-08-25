@@ -1,6 +1,6 @@
 [
   {
-    "repaired_file": "openapi.json",
+    "repaired_file": "apis/openapi/n8n.io/main/1.1.1/openapi.json",
     "repairs": [
       {
         "issue": {
@@ -13,6 +13,23 @@
         "action_taken": "Changed server URL from '/api/v1' to 'https://{your-n8n-instance-domain}/api/v{api-version-number}' with variables definition.",
         "source": "human",
         "timestamp": "2025-08-07T12:10:00.000000"
+      }
+    ]
+  },
+  {
+    "repaired_file": "apis/openapi/n8n.io/main/1.1.1/openapi.json",
+    "repairs": [
+      {
+        "issue": {
+          "message": "The current server URL uses a variable for the API version number (v{{api-version-number}}), but the request specifies that the API endpoint should explicitly be '/api/v1'.",
+          "level": "improvement",
+          "location": {
+            "jsonPath": "#/servers/0/url"
+          }
+        },
+        "action_taken": "Updated the URL of the first server entry to hardcode the API version as 'v1', changing it from 'https://{{your-n8n-instance-domain}}/api/v{{api-version-number}}' to 'https://{{your-n8n-instance-domain}}/api/v1'.",
+        "source": "automated-tool",
+        "timestamp": "2025-08-25T16:12:10.456331"
       }
     ]
   }
