@@ -11,7 +11,31 @@
   },
   "servers": [
     {
-      "url": "/v1.33"
+      "url": "https://{my-docker-domain}/v1.33",
+      "variables": {
+        "my-docker-domain": {
+          "description": "The custom domain for your Docker API instance.",
+          "default": "docker.example.com"
+        }
+      }
+    },
+    {
+      "url": "https://{my-docker-domain}/v1.33",
+      "variables": {
+        "my-docker-domain": {
+          "description": "The custom domain for your Docker API instance.",
+          "default": "docker.example.com"
+        }
+      }
+    },
+    {
+      "url": "https://{my-docker-domain}/v1.33",
+      "variables": {
+        "my-docker-domain": {
+          "description": "The custom domain for your Docker API instance.",
+          "default": "docker.example.com"
+        }
+      }
     }
   ],
   "paths": {
@@ -6090,14 +6114,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "A base64-encoded auth configuration. [See the authentication section for details.](#section/Authentication)",
-            "in": "header",
-            "name": "X-Registry-Auth",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -6160,7 +6176,12 @@
           },
           "description": "Image content if the value `-` has been specified in fromSrc query parameter"
         },
-        "summary": "Create an image"
+        "summary": "Create an image",
+        "security": [
+          {
+            "RegistryAuth": []
+          }
+        ]
       }
     },
     "/images/get": {
@@ -7191,15 +7212,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "A base64-encoded auth configuration. [See the authentication section for details.](#section/Authentication)",
-            "in": "header",
-            "name": "X-Registry-Auth",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -7242,7 +7254,12 @@
         ],
         "description": "Push an image to a registry.\n\nIf you wish to push an image on to a private registry, that image must already have a tag which references the registry. For example, `registry.example.com/myimage:latest`.\n\nThe push is cancelled if the HTTP connection is closed.\n",
         "operationId": "ImagePush",
-        "summary": "Push an image"
+        "summary": "Push an image",
+        "security": [
+          {
+            "RegistryAuth": []
+          }
+        ]
       }
     },
     "/images/{name}/tag": {
@@ -8891,14 +8908,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "A base64-encoded auth configuration to use when pulling a plugin from a registry. [See the authentication section for details.](#section/Authentication)",
-            "in": "header",
-            "name": "X-Registry-Auth",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -8929,7 +8938,12 @@
         "requestBody": {
           "$ref": "#/components/requestBodies/PluginPullBody"
         },
-        "summary": "Install a plugin"
+        "summary": "Install a plugin",
+        "security": [
+          {
+            "RegistryAuth": []
+          }
+        ]
       }
     },
     "/plugins/{name}": {
@@ -9351,14 +9365,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "A base64-encoded auth configuration to use when pulling a plugin from a registry. [See the authentication section for details.](#section/Authentication)",
-            "in": "header",
-            "name": "X-Registry-Auth",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -9496,7 +9502,12 @@
             }
           }
         },
-        "summary": "Upgrade a plugin"
+        "summary": "Upgrade a plugin",
+        "security": [
+          {
+            "RegistryAuth": []
+          }
+        ]
       }
     },
     "/secrets": {
@@ -10149,16 +10160,7 @@
     },
     "/services/create": {
       "post": {
-        "parameters": [
-          {
-            "description": "A base64-encoded auth configuration for pulling from private registries. [See the authentication section for details.](#section/Authentication)",
-            "in": "header",
-            "name": "X-Registry-Auth",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "201": {
             "content": {
@@ -10512,7 +10514,12 @@
           },
           "required": true
         },
-        "summary": "Create a service"
+        "summary": "Create a service",
+        "security": [
+          {
+            "RegistryAuth": []
+          }
+        ]
       }
     },
     "/services/{id}": {
@@ -10907,14 +10914,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "A base64-encoded auth configuration for pulling from private registries. [See the authentication section for details.](#section/Authentication)",
-            "in": "header",
-            "name": "X-Registry-Auth",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -11113,7 +11112,12 @@
           },
           "required": true
         },
-        "summary": "Update a service"
+        "summary": "Update a service",
+        "security": [
+          {
+            "RegistryAuth": []
+          }
+        ]
       }
     },
     "/session": {
@@ -13506,32 +13510,6 @@
         },
         "type": "object"
       },
-      "BuildInfo": {
-        "properties": {
-          "error": {
-            "type": "string"
-          },
-          "errorDetail": {
-            "$ref": "#/components/schemas/ErrorDetail"
-          },
-          "id": {
-            "type": "string"
-          },
-          "progress": {
-            "type": "string"
-          },
-          "progressDetail": {
-            "$ref": "#/components/schemas/ProgressDetail"
-          },
-          "status": {
-            "type": "string"
-          },
-          "stream": {
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
       "ClusterInfo": {
         "description": "ClusterInfo represents information about the swarm as is returned by the\n\"/info\" endpoint. Join-tokens are not included.\n",
         "nullable": true,
@@ -13883,23 +13861,6 @@
           "type": "object"
         },
         "type": "array"
-      },
-      "CreateImageInfo": {
-        "properties": {
-          "error": {
-            "type": "string"
-          },
-          "progress": {
-            "type": "string"
-          },
-          "progressDetail": {
-            "$ref": "#/components/schemas/ProgressDetail"
-          },
-          "status": {
-            "type": "string"
-          }
-        },
-        "type": "object"
       },
       "DeviceMapping": {
         "description": "A device mapping between the host and container",
@@ -14585,7 +14546,8 @@
             "type": "object"
           }
         ],
-        "description": "Container configuration that depends on the host we are running on"
+        "description": "Container configuration that depends on the host we are running on",
+        "type": "object"
       },
       "IPAM": {
         "properties": {
@@ -16057,23 +16019,6 @@
           },
           "message": {
             "type": "integer"
-          }
-        },
-        "type": "object"
-      },
-      "PushImageInfo": {
-        "properties": {
-          "error": {
-            "type": "string"
-          },
-          "progress": {
-            "type": "string"
-          },
-          "progressDetail": {
-            "$ref": "#/components/schemas/ProgressDetail"
-          },
-          "status": {
-            "type": "string"
           }
         },
         "type": "object"
@@ -18282,6 +18227,13 @@
           "Options"
         ],
         "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "RegistryAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-Registry-Auth"
       }
     }
   },
