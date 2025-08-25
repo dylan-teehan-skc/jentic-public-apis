@@ -120,12 +120,12 @@ jobs:
             actual_file_path="${{ steps.parse.outputs.file_path }}"
             
             # Extract and fix new feedback from API response in one step
-            echo "$response" | jq -c --arg filepath "$actual_file_path" '.feedback | map(.repaired_file = $filepath)' > new_feedback.json
+            echo "$response" | jq --arg filepath "$actual_file_path" '.feedback | map(.repaired_file = $filepath)' > new_feedback.json
             
             # Check if feedback.json already exists in that directory
             if [ -f "$feedback_file" ]; then
               echo "Existing feedback.json found at $feedback_file - merging..."
-              # Merge: combine existing and new feedback arrays
+              # Merge: combine existing and new feedback arrays with proper indentation
               jq -s 'add' "$feedback_file" new_feedback.json > merged_feedback.json
               mv merged_feedback.json "$feedback_file"
             else
