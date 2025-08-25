@@ -191,7 +191,7 @@ jobs:
           script: |
             const apiSuccess = '${{ steps.api_call.outputs.api_success }}' === 'true';
             const prCreated = '${{ steps.create_pr.outputs.pr_created }}' === 'true';
-            const repairDetails = '${{ steps.api_call.outputs.repair_details }}';
+            const repairDetails = ${{ toJSON(steps.api_call.outputs.repair_details) }};
 
             let emoji, title;
             if (!apiSuccess) {
