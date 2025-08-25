@@ -1,0 +1,19 @@
+[
+  {
+    "repaired_file": "apis/openapi/n8n.io/main/1.1.1/openapi.json",
+    "repairs": [
+      {
+        "issue": {
+          "message": "The server URL currently uses a variable for the API version, 'v{{api-version-number}}', but the user explicitly requested the endpoint to be fixed to 'v1'.",
+          "level": "error",
+          "location": {
+            "jsonPath": "#/servers/0"
+          }
+        },
+        "action_taken": "Updated the server URL to hardcode 'v1' in the path, changing it from 'https://{{your-n8n-instance-domain}}/api/v{{api-version-number}}' to 'https://{{your-n8n-instance-domain}}/api/v1'. Concurrently, the 'api-version-number' variable definition was removed from the server's variables as it is no longer used.",
+        "source": "automated-tool",
+        "timestamp": "2025-08-25T15:15:35.126084"
+      }
+    ]
+  }
+]
